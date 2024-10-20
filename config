@@ -35,15 +35,34 @@ markup=none
 # The second parameter overrides the mixer selection
 # See the script for details.
 
-[volume]
-label=🔉
-interval=once
-signal=10
-#STEP=5%
+[timer_and_stopwatch]
+format=json
+interval=1
+DEFAULT_MODE=timer
+DEFAULT_TIMER=50*60
+PLAY_LABEL=(playing)
+PAUSE_LABEL=(paused)
 
-[powerprofilesctl]
-label=🔌
-interval=30
+[volume-pipewire]
+interval=once
+signal=1
+MIXER=[determined automatically]
+SCONTROL=[determined automatically]
+#exposed format variables: ${SYMB}, ${VOL}, ${INDEX}, ${NAME}
+LONG_FORMAT="${SYMB} ${VOL}% [${INDEX}:${NAME}]"
+SHORT_FORMAT="${SYMB} ${VOL}% [${INDEX}]"
+AUDIO_HIGH_SYMBOL='  '
+AUDIO_MED_THRESH=50
+AUDIO_MED_SYMBOL='  '
+AUDIO_LOW_THRESH=0
+AUDIO_LOW_SYMBOL='  '
+AUDIO_DELTA=5
+DEFAULT_COLOR="#ffffff"
+MUTED_COLOR="#a0a0a0"
+USE_ALSA_NAME=0
+USE_DESCRIPTION=0
+# SUBSCRIBE=1 requires interval=persist and always uses LONG_FORMAT
+SUBSCRIBE=0
 
 # Memory usage
 #
@@ -74,16 +93,6 @@ color=#00FF00
 interval=10
 separator=false
 
-# [wifi]
-# #INTERFACE=wlp3s0
-# label=wifi:
-# interval=10
-# separator=false
-
-#[bandwidth]
-##INTERFACE=eth0
-#interval=5
-
 # CPU usage
 #
 # The script may be called with -w and -c switches to specify thresholds,
@@ -93,18 +102,6 @@ label=🖥️
 interval=10
 min_width=CPU 100.00%
 #separator=false
-
-# [load_average]
-# label=LOAD
-# interval=10
-
-# Battery indicator
-#
-# The battery instance defaults to 0.
-[battery2]
-markup=pango
-interval=30
-
 
 # Date Time
 #
@@ -139,13 +136,30 @@ signal=10
 label=🌡️
 interval=10
 
-# APT Upgrades
-[apt-upgrades]
-signal=1
-label=📥
-interval=once
+[pacman-updates]
+command=$SCRIPT_DIR/arch-update
+markup=pango
+interval= 3600
+QUIET=true
+WATCH=^linux.* ^pacman.*
+BASE_COLOR=#5fff5f
+UPDATE_COLOR=#FFFF85
+AUR=true
+LABEL= 
 
-# Brightness
-[brightness]
-command=$SRCIPT_DIR/brightnesss/bin/brightness -a /sys/class/backlight/intel_backlight/actual_brightness -m /sys/class/backlight/intel_backlight/max_brightness
-interval=persist
+[monitor_manager]
+interval=once
+SHOW_ON_OFF=1
+SHOW_NAMES=1
+SHOW_PRIMARY=1
+SHOW_MODE=1
+SHOW_BLANKED=1
+SHOW_DUPLICATE=1
+SHOW_ROTATION=1
+SHOW_REFLECTION=1
+SHOW_BRIGHTNESS=1
+SHOW_BRIGHTNESS_VALUE=0
+SHOW_UP_DOWN=1
+FONT_FAMILY=DejaVu Sans Mono
+FONT_SIZE=11
+CLOSE_TO_BOUNDARY_BUFFER=20
